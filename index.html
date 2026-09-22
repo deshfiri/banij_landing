@@ -45,6 +45,7 @@
             shine: { to: { backgroundPosition: '200% center' } },
             grow: { from: { width: '0%' }, to: { width: '100%' } },
             travel: { '0%': { width: '8%' }, '100%': { width: '72%' } },
+            pulseRing: { '0%': { transform: 'scale(1)', opacity: '.55' }, '80%,100%': { transform: 'scale(1.7)', opacity: '0' } },
           },
           animation: {
             marquee: 'marquee 45s linear infinite',
@@ -58,6 +59,7 @@
             shine: 'shine 9s linear infinite',
             grow: 'grow 7s linear forwards',
             travel: 'travel 6s ease-in-out infinite alternate',
+            'pulse-ring': 'pulseRing 2.2s cubic-bezier(0,0,.2,1) infinite',
           },
         },
       },
@@ -207,31 +209,27 @@
           <!-- PLACEHOLDER rating — replace with real figure -->
         </div>
 
-        <!-- video: RIGHT -->
+        <!-- video: RIGHT — click-to-play YouTube embed (no iframe loaded until the visitor clicks, so the hero stays fast) -->
         <div class="reveal relative lg:col-span-5" data-d="2">
-          <!-- video card: fills the right-hand column (about 40% of the container), near-square, static - no hover tilt -->
+          <!-- PLACEHOLDER video — swap data-yt-id for Banij's real YouTube video ID -->
           <div class="max-w-[520px] lg:ml-auto">
             <div class="relative">
               <div class="blobs pointer-events-none absolute inset-4 -z-10 rounded-[3rem] aurora-bg opacity-40 blur-3xl"></div>
               <div class="ring-grad relative overflow-hidden rounded-[2.5rem] p-2 shadow-[0_50px_120px_-40px_rgba(167,139,250,.7)]">
-                <div class="relative aspect-[17/16] overflow-hidden rounded-[2rem] bg-black">
-                  <video class="absolute inset-0 h-full w-full object-cover" style="object-position:40% center" autoplay muted loop playsinline preload="metadata"
-                         poster="https://images.pexels.com/videos/13617656/boats-port-sea-13617656.jpeg?cs=tinysrgb&dpr=1&w=1200">
-                    <source src="https://videos.pexels.com/video-files/13617656/13617656-hd_1280_720_60fps.mp4" type="video/mp4">
-                  </video>
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/25"></div>
-                  <div class="glass absolute left-4 top-4 flex items-center gap-2 rounded-full py-1.5 pl-3 pr-4 text-xs"><span class="h-2 w-2 rounded-full bg-ice shadow-[0_0_10px_#67E8F9]"></span>Live shipment tracking</div>
+                <div id="heroYt" class="group relative aspect-[17/16] overflow-hidden rounded-[2rem] bg-black" data-yt-id="jNQXAC9IVRw">
+                  <img src="https://img.youtube.com/vi/jNQXAC9IVRw/hqdefault.jpg" alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30 transition-opacity group-hover:from-black/60"></div>
+                  <div class="glass absolute left-4 top-4 flex items-center gap-2 rounded-full py-1.5 pl-3 pr-4 text-xs"><span class="h-2 w-2 rounded-full bg-ice shadow-[0_0_10px_#67E8F9]"></span>Watch how Banij works</div>
 
-                  <div class="glass absolute inset-x-4 bottom-4 rounded-2xl p-4">
-                    <div class="flex items-center justify-between gap-2 text-sm"><b class="font-medium">Order #BNJ-2048</b><span class="rounded-full bg-ice/15 px-2.5 py-0.5 text-[11px] text-ice">In transit</span></div>
-                    <div class="mt-1 text-xs text-mute">Dubai &rarr; Dhaka &middot; est. 3 days</div>
-                    <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-fg/10"><div class="animate-travel aurora-bg h-full rounded-full"></div></div>
-                  </div>
+                  <button type="button" id="heroYtPlay" aria-label="Play video: how Banij works" class="absolute inset-0 grid place-items-center">
+                    <span class="relative grid h-[76px] w-[76px] place-items-center">
+                      <span class="animate-pulse-ring absolute inset-0 rounded-full aurora-bg"></span>
+                      <span class="aurora-bg relative grid h-full w-full place-items-center rounded-full text-void shadow-[0_10px_45px_-8px_rgba(167,139,250,.85)] transition group-hover:scale-105">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="translate-x-0.5"><path d="M8 5v14l11-7z"/></svg>
+                      </span>
+                    </span>
+                  </button>
                 </div>
-              </div>
-              <div class="animate-floaty glass absolute -left-8 top-24 hidden rounded-2xl px-4 py-3 lg:block" style="background:rgb(var(--void) / .85)">
-                <p class="text-xs text-mute">Orders this week</p>
-                <p class="font-display text-2xl font-semibold"><span class="aurora-text">+38%</span></p>
               </div>
             </div>
           </div>
@@ -504,6 +502,13 @@
     const menuBtn = document.getElementById('menuBtn'), mobileMenu = document.getElementById('mobileMenu');
     menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+    // hero video: swap the thumbnail for a real YouTube embed only once clicked
+    const heroYt = document.getElementById('heroYt');
+    document.getElementById('heroYtPlay').addEventListener('click', () => {
+      const id = heroYt.dataset.ytId;
+      heroYt.innerHTML = `<iframe class="absolute inset-0 h-full w-full" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="Banij — how it works" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+    });
 
     // reveal on scroll
     const io = new IntersectionObserver((entries) => {
