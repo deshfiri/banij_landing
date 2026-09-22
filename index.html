@@ -114,12 +114,18 @@
     input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 7px rgba(167,139,250,.35), 0 2px 8px rgba(0,0,0,.3); cursor: pointer; }
     input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 7px rgba(167,139,250,.35), 0 2px 8px rgba(0,0,0,.3); cursor: pointer; }
 
-    .js .reveal { opacity: 0; transform: translateY(28px); filter: blur(6px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1), filter .9s ease; }
-    .js .reveal.in { opacity: 1; transform: none; filter: none; }
+    /* reveal-on-scroll: a gentle "flip up into place" — no blur, just a hinge at the base of the element */
+    .js .reveal { opacity: 0; transform: perspective(1000px) rotateX(-24deg) translateY(20px); transform-origin: 50% 100%; transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+    .js .reveal.in { opacity: 1; transform: none; }
     .js .reveal[data-d="1"] { transition-delay: .1s } .js .reveal[data-d="2"] { transition-delay: .2s } .js .reveal[data-d="3"] { transition-delay: .3s }
+    /* small uppercase section labels ("The process", "About Banij", …) draw an aurora-gradient underline as they reveal */
+    .eyebrow { position: relative; }
+    .eyebrow::after { content: ""; position: absolute; left: 0; bottom: -10px; height: 2px; width: 2.25rem; border-radius: 2px; background: linear-gradient(90deg, var(--g1), var(--g2) 55%, var(--g3)); transform: scaleX(1); transform-origin: 0 50%; }
+    .js .eyebrow::after { transform: scaleX(0); transition: transform .6s cubic-bezier(.2,.7,.2,1) .2s; }
+    .js .eyebrow.in::after, .js .reveal.in .eyebrow::after { transform: scaleX(1); }
     #tQuote { transition: opacity .35s ease, transform .35s ease; }
     #tQuote.swap { opacity: 0; transform: translateY(8px); }
-    @media (prefers-reduced-motion: reduce) { .animate-marquee, .animate-drift1, .animate-drift2, .animate-orbit, .animate-orbit-r, .animate-orbit2, .animate-orbit2-r, .animate-floaty, .animate-shine, .animate-travel { animation: none !important; } .js .reveal { opacity:1; transform:none; filter:none; transition:none; } }
+    @media (prefers-reduced-motion: reduce) { .animate-marquee, .animate-drift1, .animate-drift2, .animate-orbit, .animate-orbit-r, .animate-orbit2, .animate-orbit2-r, .animate-floaty, .animate-shine, .animate-travel { animation: none !important; } .js .reveal { opacity:1; transform:none; transition:none; } .eyebrow::after { transform: scaleX(1) !important; transition: none !important; } }
   </style>
 </head>
 
@@ -248,7 +254,7 @@
       <div class="wrap grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-5">
           <div class="lg:sticky lg:top-36">
-            <p class="reveal mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">The process</p>
+            <p class="reveal eyebrow mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">The process</p>
             <h2 class="reveal font-display text-5xl font-semibold leading-[1.02] tracking-[-0.035em] lg:text-6xl" data-d="1">Four steps from <span class="aurora-text">first call</span> to first order.</h2>
             <p class="reveal mt-6 max-w-md text-lg leading-relaxed text-mute" data-d="2">A playbook refined across hundreds of launches. Scroll the path &mdash; every step has an owner, a deadline and a report.</p>
             <a href="#contact" class="reveal glass mt-9 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm transition hover:bg-fg/10" data-d="3">Talk to a strategist &rarr;</a>
@@ -318,7 +324,7 @@
       <div class="blobs pointer-events-none absolute -right-40 top-1/4 h-[520px] w-[520px] rounded-full bg-vio/20 blur-[150px]"></div>
       <div class="wrap relative grid items-center gap-16 lg:grid-cols-12">
         <div class="lg:col-span-6">
-          <p class="reveal mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">About Banij</p>
+          <p class="reveal eyebrow mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">About Banij</p>
           <h2 class="reveal font-display text-5xl font-semibold leading-[1.02] tracking-[-0.035em] lg:text-6xl" data-d="1">One partner for every step between <span class="aurora-text">here and home.</span></h2>
           <div class="reveal mt-7 space-y-5 text-lg leading-relaxed text-mute" data-d="2">
             <p>Banij, from the team at Deshfiri, exists because distance, trust and paperwork stop too many Bangladeshis abroad from investing in their own country.</p>
@@ -369,7 +375,7 @@
     <section id="clients" class="section-y relative">
       <div class="wrap mb-12 flex flex-wrap items-end justify-between gap-8">
         <div class="max-w-2xl">
-          <p class="reveal mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">Our clients</p>
+          <p class="reveal eyebrow mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">Our clients</p>
           <h2 class="reveal font-display text-5xl font-semibold leading-[1.02] tracking-[-0.035em] lg:text-6xl" data-d="1">Brands built by founders <span class="aurora-text">like you.</span></h2>
         </div>
         <p class="reveal max-w-sm text-lg leading-relaxed text-mute" data-d="2">A few of the businesses we&rsquo;ve helped launch &mdash; from home d&eacute;cor to organic food.</p>
@@ -419,7 +425,7 @@
       </div>
       <div class="wrap reveal relative grid items-center gap-12 lg:grid-cols-12">
         <div class="lg:col-span-7">
-          <p class="mb-6 text-xs font-medium uppercase tracking-[.25em] text-ice">Ready when you are</p>
+          <p class="eyebrow mb-6 text-xs font-medium uppercase tracking-[.25em] text-ice">Ready when you are</p>
           <h2 class="font-display text-[clamp(2.6rem,5.4vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.04em]">Your next chapter starts <span class="aurora-text">at home.</span></h2>
           <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg/70">Book a free 30-minute strategy call. Leave with a clear plan &mdash; whether or not we work together.</p>
         </div>
@@ -437,7 +443,7 @@
     <section id="contact" class="section-y relative">
       <div class="wrap grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-5">
-          <p class="reveal mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">Contact</p>
+          <p class="reveal eyebrow mb-5 text-xs font-medium uppercase tracking-[.25em] text-ice">Contact</p>
           <h2 class="reveal font-display text-5xl font-semibold leading-[1.02] tracking-[-0.035em] lg:text-6xl" data-d="1">Tell us what you&rsquo;d like to <span class="aurora-text">build.</span></h2>
           <p class="reveal mt-6 max-w-md text-lg text-mute" data-d="2">A strategist replies within one working day &mdash; in Bangla or English.</p>
 
