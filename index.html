@@ -13,7 +13,9 @@
   <script>
     document.documentElement.classList.add('js');
     // apply the saved colour theme before first paint (light is the default)
-    try { const t = localStorage.getItem('banij-theme'); if (t === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+    // note: the storage key has a "-v2" suffix so any "dark" saved by an
+    // earlier visitor (from before light became the default) is ignored
+    try { const t = localStorage.getItem('banij-theme-v2'); if (t === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -514,7 +516,7 @@
       const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
       root.classList.add('theme-anim');                       // brief colour cross-fade
       if (next === 'dark') root.dataset.theme = 'dark'; else delete root.dataset.theme;
-      try { localStorage.setItem('banij-theme', next); } catch (e) {}
+      try { localStorage.setItem('banij-theme-v2', next); } catch (e) {}
       syncThemeBtn();
       setTimeout(() => root.classList.remove('theme-anim'), 450);
     });
